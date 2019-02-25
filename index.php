@@ -1,14 +1,14 @@
-<?php   
+<?php
 /*
 Plugin Name:  Cryptocurrency Widgets by Wallet.app
-Plugin URI: 
+Plugin URI:
 Description:  Cryptocurrency Widgets WordPress plugin displays current prices of over crypto coins - bitcoin, ethereum, ripple and +4000 more. Totally free, no ads.
 Author: Wallet.app
-Author URI: http://wallet.app
+Author URI: https://api.wallet.app
 Version: 0.1
 */
 
-function enqueue_fe_script() {   
+function enqueue_fe_script() {
 	wp_enqueue_script( 'marquee_widget', plugin_dir_url( __FILE__ ) . 'js/marquee_widget.js' );
 	wp_enqueue_script( 'list_widget', plugin_dir_url( __FILE__ ) . 'js/list_widget.js' );
 }
@@ -35,20 +35,20 @@ class Wallet_App_Currency_Widget extends WP_Widget {
 			)
 		);
 	}
-	// The widget form (for the backend ) 
+	// The widget form (for the backend )
 	public function form( $instance ) {
 		// Set widget defaults
 		$defaults = array(
 			'widget_marquee'    => '',
 			'bgcolor'     		=> '',
-			'width'       		=> '0', 
+			'width'       		=> '0',
 			'coinID' 			=> isset( $instance['coinID'] ) ? wp_strip_all_tags( $instance['coinID'] ) : 'bitcoin,ethereum,ripple,eos,litecoin,bitcoin-cash,nem',
 			'currencyCode'   	=> '',
 		);
-		
+
 		// Parse current settings with defaults
-		extract( wp_parse_args( ( array ) $instance, $defaults ) ); 
-		
+		extract( wp_parse_args( ( array ) $instance, $defaults ) );
+
 		?>
 
 		<?php // Dropdown ?>
@@ -86,7 +86,7 @@ class Wallet_App_Currency_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'coinIDList' ) ); ?>"><?php _e( 'List of coins', 'text_domain' ); ?></label>
 			<div class="wallet-app-added-coins-list" id="<?php echo $this->get_field_name('coinIDList') ?>">
-				<?php 
+				<?php
 					$curr = explode(',', $coinID);
 
 					for($i = 0; $i < sizeof($curr); $i++)
@@ -116,7 +116,7 @@ class Wallet_App_Currency_Widget extends WP_Widget {
 
 		<?php
 			$body = "[]";
-			$response = wp_remote_get( 'http://104.248.28.171:3000/api/get-coin-list' );
+			$response = wp_remote_get( 'https://api.wallet.app/api/get-coin-list' );
 			if ( is_wp_error( $response ) ){
 				echo $response->get_error_message();
 			}
@@ -128,10 +128,10 @@ class Wallet_App_Currency_Widget extends WP_Widget {
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'coin-search' ) ); ?>"><?php _e( 'Coin search', 'text_domain' ); ?></label>
-			<input id="<?php echo esc_attr( $this->get_field_id( 'coin-search' ) ); ?>" class="currency-search-input" name="<?php echo esc_attr( $this->get_field_name( 'coin-search' ) ); ?>" list="<?php echo esc_attr( $this->get_field_id( 'coin-search-datalist' ) ); ?>"> 
+			<input id="<?php echo esc_attr( $this->get_field_id( 'coin-search' ) ); ?>" class="currency-search-input" name="<?php echo esc_attr( $this->get_field_name( 'coin-search' ) ); ?>" list="<?php echo esc_attr( $this->get_field_id( 'coin-search-datalist' ) ); ?>">
 			<input type="button" value="Add" />
 			<datalist id="<?php echo esc_attr( $this->get_field_id( 'coin-search-datalist' ) ); ?>">
-				<?php 
+				<?php
 					for($i = 0; $i < sizeof($body); $i++)
 					{
 						echo '<option value="' . esc_attr( $body[$i]['id'] ) . '">' . $body[$i]['name'] . ' ' .$body[$i]['symbol'].'</option>';
@@ -168,7 +168,7 @@ class Wallet_App_Currency_Widget extends WP_Widget {
 		$instance['widget_marquee']    = isset( $new_instance['widget_marquee'] ) ? wp_strip_all_tags( $new_instance['widget_marquee'] ) : '';
 
 		$instance['bgcolor']     = isset( $new_instance['bgcolor'] ) ? wp_strip_all_tags( $new_instance['bgcolor'] ) : '';
-		
+
 		$instance['width']     = isset( $new_instance['width'] ) ? wp_strip_all_tags( $new_instance['width'] ) : '';
 
 		$instance['coinID']     = isset( $new_instance['coinID'] ) ? wp_strip_all_tags( $new_instance['coinID'] ) : '';
@@ -197,7 +197,7 @@ class Wallet_App_Currency_Widget extends WP_Widget {
 		}
 		echo '<'.$widget_marquee.'  coin-ids="'.$coinID.'" currency="'.$currencyCode.'" locale="en" background-color="'.$bgcolor.'"'.$$widthText.'"/>';
 
-		
+
 
 
 		echo $after_widget;
