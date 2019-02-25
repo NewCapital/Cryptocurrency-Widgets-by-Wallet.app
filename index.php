@@ -29,7 +29,7 @@ class Wallet_App_Currency_Widget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
 			'wallet_app_currency_widget',
-			__( 'Cryptocurrency Widgets by Wallet.app', 'text_domain' ),
+			__( 'Cryptocurrency Widgets by api.wallet.app', 'text_domain' ),
 			array(
 				'customize_selective_refresh' => true,
 			)
